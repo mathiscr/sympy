@@ -133,16 +133,10 @@ Sets
 .. autoclass:: sympy.assumptions.predicates.sets.ExtendedRealPredicate
    :members:
 
-.. autoclass:: sympy.assumptions.predicates.sets.HermitianPredicate
-   :members:
-
 .. autoclass:: sympy.assumptions.predicates.sets.ComplexPredicate
    :members:
 
 .. autoclass:: sympy.assumptions.predicates.sets.ImaginaryPredicate
-   :members:
-
-.. autoclass:: sympy.assumptions.predicates.sets.AntihermitianPredicate
    :members:
 
 .. autoclass:: sympy.assumptions.predicates.sets.AlgebraicPredicate
