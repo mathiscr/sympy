@@ -112,7 +112,6 @@ class AssumptionsWrapper(Basic):
         return obj
 
     _eval_is_algebraic = make_eval_method("algebraic")
-    _eval_is_antihermitian = make_eval_method("antihermitian")
     _eval_is_commutative = make_eval_method("commutative")
     _eval_is_complex = make_eval_method("complex")
     _eval_is_composite = make_eval_method("composite")
@@ -124,7 +123,6 @@ class AssumptionsWrapper(Basic):
     _eval_is_extended_positive = make_eval_method("extended_positive")
     _eval_is_extended_real = make_eval_method("extended_real")
     _eval_is_finite = make_eval_method("finite")
-    _eval_is_hermitian = make_eval_method("hermitian")
     _eval_is_imaginary = make_eval_method("imaginary")
     _eval_is_infinite = make_eval_method("infinite")
     _eval_is_integer = make_eval_method("integer")
