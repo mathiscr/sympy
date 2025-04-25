@@ -30,16 +30,6 @@ class AssumptionKeys:
     # fact system. Non-predicate attributes will break this.
 
     @memoize_property
-    def hermitian(self):
-        from .handlers.sets import HermitianPredicate
-        return HermitianPredicate()
-
-    @memoize_property
-    def antihermitian(self):
-        from .handlers.sets import AntihermitianPredicate
-        return AntihermitianPredicate()
-
-    @memoize_property
     def real(self):
         from .handlers.sets import RealPredicate
         return RealPredicate()
@@ -575,7 +565,7 @@ def _ask_single_fact(key, local_facts):
             if len(cl) == 1:
                 f, = cl
                 prop_facts = known_facts_dict.get(key, None)
-                prop_req = prop_facts[0] if prop_facts is not None else set()
+                prop_req = prop_facts if type(prop_facts) == set else prop_facts[0] if prop_facts is not None else set()
                 if f.is_Not and f.arg in prop_req:
                     # the prerequisite of proposition is rejected
                     return False

@@ -134,6 +134,7 @@ class Expr(Basic, EvalfMixin):
     def is_antihermitian(self):
         imply_antihermitian = [
             self.is_imaginary,
+            self.is_zero
         ]
         if any(imply_antihermitian):
             return True

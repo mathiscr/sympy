@@ -105,11 +105,6 @@ def get_number_facts(x = None):
         Implies(Q.composite(x) | Q.prime(x), Q.integer(x) & Q.positive(x)),
         Implies(Q.even(x) & Q.positive(x) & ~Q.prime(x), Q.composite(x)),
 
-        # hermitian and antihermitian
-        Implies(Q.real(x), Q.hermitian(x)),
-        Implies(Q.imaginary(x), Q.antihermitian(x)),
-        Implies(Q.zero(x), Q.hermitian(x) | Q.antihermitian(x)),
-
         # define finity and infinity, and build extended real line
         Exclusive(Q.infinite(x), Q.finite(x)),
         Implies(Q.complex(x), Q.finite(x)),

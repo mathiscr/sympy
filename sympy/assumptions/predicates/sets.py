@@ -219,30 +219,6 @@ class ExtendedRealPredicate(Predicate):
     )
 
 
-class HermitianPredicate(Predicate):
-    """
-    Hermitian predicate.
-
-    Explanation
-    ===========
-
-    ``ask(Q.hermitian(x))`` is true iff ``x`` belongs to the set of
-    Hermitian operators.
-
-    References
-    ==========
-
-    .. [1] https://mathworld.wolfram.com/HermitianOperator.html
-
-    """
-    # TODO: Add examples
-    name = 'hermitian'
-    handler = Dispatcher(
-        "HermitianHandler",
-        doc=("Handler for Q.hermitian.\n\n"
-        "Test that an expression belongs to the field of Hermitian operators.")
-    )
-
 
 class ComplexPredicate(Predicate):
     """
@@ -316,32 +292,6 @@ class ImaginaryPredicate(Predicate):
         "that is, numbers in the form x*I, where x is real.")
     )
 
-
-class AntihermitianPredicate(Predicate):
-    """
-    Antihermitian predicate.
-
-    Explanation
-    ===========
-
-    ``Q.antihermitian(x)`` is true iff ``x`` belongs to the field of
-    antihermitian operators, i.e., operators in the form ``x*I``, where
-    ``x`` is Hermitian.
-
-    References
-    ==========
-
-    .. [1] https://mathworld.wolfram.com/HermitianOperator.html
-
-    """
-    # TODO: Add examples
-    name = 'antihermitian'
-    handler = Dispatcher(
-        "AntiHermitianHandler",
-        doc=("Handler for Q.antihermitian.\n\n"
-        "Test that an expression belongs to the field of anti-Hermitian\n"
-        "operators, that is, operators in the form x*I, where x is Hermitian.")
-    )
 
 
 class AlgebraicPredicate(Predicate):

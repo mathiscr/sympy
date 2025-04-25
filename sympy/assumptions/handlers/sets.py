@@ -21,8 +21,8 @@ from sympy.multipledispatch import MDNotImplementedError
 from .common import test_closed_group, ask_all, ask_any
 from ..predicates.sets import (IntegerPredicate, RationalPredicate,
     IrrationalPredicate, RealPredicate, ExtendedRealPredicate,
-    HermitianPredicate, ComplexPredicate, ImaginaryPredicate,
-    AntihermitianPredicate, AlgebraicPredicate)
+    ComplexPredicate, ImaginaryPredicate,
+    AlgebraicPredicate)
 
 
 # IntegerPredicate
@@ -391,91 +391,6 @@ def _(expr, assumptions):
     return test_closed_group(expr, assumptions, Q.extended_real)
 
 
-# HermitianPredicate
-
-@HermitianPredicate.register(object) # type:ignore
-def _(expr, assumptions):
-    if isinstance(expr, MatrixBase):
-        return None
-    return ask(Q.real(expr), assumptions)
-
-@HermitianPredicate.register(Add) # type:ignore
-def _(expr, assumptions):
-    """
-    * Hermitian + Hermitian  -> Hermitian
-    * Hermitian + !Hermitian -> !Hermitian
-    """
-    if expr.is_number:
-        raise MDNotImplementedError
-    return test_closed_group(expr, assumptions, Q.hermitian)
-
-@HermitianPredicate.register(Mul) # type:ignore
-def _(expr, assumptions):
-    """
-    As long as there is at most only one noncommutative term:
-
-    * Hermitian*Hermitian         -> Hermitian
-    * Hermitian*Antihermitian     -> !Hermitian
-    * Antihermitian*Antihermitian -> Hermitian
-    """
-    if expr.is_number:
-        raise MDNotImplementedError
-    nccount = 0
-    result = True
-    for arg in expr.args:
-        if ask(Q.antihermitian(arg), assumptions):
-            result = result ^ True
-        elif not ask(Q.hermitian(arg), assumptions):
-            break
-        if ask(~Q.commutative(arg), assumptions):
-            nccount += 1
-            if nccount > 1:
-                break
-    else:
-        return result
-
-@HermitianPredicate.register(Pow) # type:ignore
-def _(expr, assumptions):
-    """
-    * Hermitian**Integer -> Hermitian
-    """
-    if expr.is_number:
-        raise MDNotImplementedError
-    if expr.base == E:
-        if ask(Q.hermitian(expr.exp), assumptions):
-            return True
-        raise MDNotImplementedError
-    if ask(Q.hermitian(expr.base), assumptions):
-        if ask(Q.integer(expr.exp), assumptions):
-            return True
-    raise MDNotImplementedError
-
-@HermitianPredicate.register_many(cos, sin) # type:ignore
-def _(expr, assumptions):
-    if ask(Q.hermitian(expr.args[0]), assumptions):
-        return True
-    raise MDNotImplementedError
-
-@HermitianPredicate.register(exp) # type:ignore
-def _(expr, assumptions):
-    if ask(Q.hermitian(expr.exp), assumptions):
-        return True
-    raise MDNotImplementedError
-
-@HermitianPredicate.register(MatrixBase) # type:ignore
-def _(mat, assumptions):
-    rows, cols = mat.shape
-    ret_val = True
-    for i in range(rows):
-        for j in range(i, cols):
-            cond = fuzzy_bool(Eq(mat[i, j], conjugate(mat[j, i])))
-            if cond is None:
-                ret_val = None
-            if cond == False:
-                return False
-    if ret_val is None:
-        raise MDNotImplementedError
-    return ret_val
 
 
 # ComplexPredicate
@@ -668,85 +583,6 @@ def _(expr, assumptions):
 def _(expr, assumptions):
     return None
 
-
-# AntihermitianPredicate
-
-@AntihermitianPredicate.register(object) # type:ignore
-def _(expr, assumptions):
-    if isinstance(expr, MatrixBase):
-        return None
-    if ask(Q.zero(expr), assumptions):
-        return True
-    return ask(Q.imaginary(expr), assumptions)
-
-@AntihermitianPredicate.register(Add) # type:ignore
-def _(expr, assumptions):
-    """
-    * Antihermitian + Antihermitian  -> Antihermitian
-    * Antihermitian + !Antihermitian -> !Antihermitian
-    """
-    if expr.is_number:
-        raise MDNotImplementedError
-    return test_closed_group(expr, assumptions, Q.antihermitian)
-
-@AntihermitianPredicate.register(Mul) # type:ignore
-def _(expr, assumptions):
-    """
-    As long as there is at most only one noncommutative term:
-
-    * Hermitian*Hermitian         -> !Antihermitian
-    * Hermitian*Antihermitian     -> Antihermitian
-    * Antihermitian*Antihermitian -> !Antihermitian
-    """
-    if expr.is_number:
-        raise MDNotImplementedError
-    nccount = 0
-    result = False
-    for arg in expr.args:
-        if ask(Q.antihermitian(arg), assumptions):
-            result = result ^ True
-        elif not ask(Q.hermitian(arg), assumptions):
-            break
-        if ask(~Q.commutative(arg), assumptions):
-            nccount += 1
-            if nccount > 1:
-                break
-    else:
-        return result
-
-@AntihermitianPredicate.register(Pow) # type:ignore
-def _(expr, assumptions):
-    """
-    * Hermitian**Integer  -> !Antihermitian
-    * Antihermitian**Even -> !Antihermitian
-    * Antihermitian**Odd  -> Antihermitian
-    """
-    if expr.is_number:
-        raise MDNotImplementedError
-    if ask(Q.hermitian(expr.base), assumptions):
-        if ask(Q.integer(expr.exp), assumptions):
-            return False
-    elif ask(Q.antihermitian(expr.base), assumptions):
-        if ask(Q.even(expr.exp), assumptions):
-            return False
-        elif ask(Q.odd(expr.exp), assumptions):
-            return True
-    raise MDNotImplementedError
-
-@AntihermitianPredicate.register(MatrixBase) # type:ignore
-def _(mat, assumptions):
-    rows, cols = mat.shape
-    ret_val = True
-    for i in range(rows):
-        for j in range(i, cols):
-            cond = fuzzy_bool(Eq(mat[i, j], -conjugate(mat[j, i])))
-            if cond is None:
-                ret_val = None
-            if cond == False:
-                return False
-    if ret_val is None:
-        raise MDNotImplementedError
-    return ret_val
 
 
 # AlgebraicPredicate
