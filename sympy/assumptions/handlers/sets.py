@@ -7,13 +7,10 @@ from sympy.core import Add, Basic, Expr, Mul, Pow, S
 from sympy.core.numbers import (AlgebraicNumber, ComplexInfinity, Exp1, Float,
     GoldenRatio, ImaginaryUnit, Infinity, Integer, NaN, NegativeInfinity,
     Number, NumberSymbol, Pi, pi, Rational, TribonacciConstant, E)
-from sympy.core.logic import fuzzy_bool
 from sympy.functions import (Abs, acos, acot, asin, atan, cos, cot, exp, im,
     log, re, sin, tan)
 from sympy.core.numbers import I
-from sympy.core.relational import Eq
-from sympy.functions.elementary.complexes import conjugate
-from sympy.matrices import Determinant, MatrixBase, Trace
+from sympy.matrices import Determinant, Trace
 from sympy.matrices.expressions.matexpr import MatrixElement
 
 from sympy.multipledispatch import MDNotImplementedError
